@@ -27,44 +27,32 @@
 <package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
 	<id>slammeddime:blogbridger</id>
 	<name>BlogBridger</name>
-	<version>1.1.4</version>
+	<version>1.1.5</version>
 	<type>modification</type>
 
-	<install for="2.0 RC5">
+	<install for="1.0-1.0.99">
 		<readme parsebbc="true">README</readme>
-		<require-file name="WordpressBridge.php" destination="$sourcedir">Install the core BlogBridger class</require-file>
-		<require-file name="WordpressUser.php" destination="$sourcedir">Install the BlogBridger User class</require-file>
-		<require-file name="WordpressPassword.php" destination="$sourcedir">Install the BlogBridger Password class</require-file>
-		<require-file name="WordpressBridge.english.php" destination="$languagedir">Language file with all language strings</require-file>
-		<require-file name="WordpressBridge.template.php" destination="$themedir">Template file for admin settings</require-file>
+		<require-file name="WordpressBridge.php" destination="SOURCEDIR">Install the core BlogBridger class</require-file>
+		<require-file name="WordpressUser.php" destination="SOURCEDIR">Install the BlogBridger User class</require-file>
+		<require-file name="WordpressPassword.php" destination="SOURCEDIR">Install the BlogBridger Password class</require-file>
+		<require-file name="WordpressBridge.english.php" destination="LANGUAGEDIR/english">Language file with all language strings</require-file>
+		<require-file name="WordpressBridge.template.php" destination="THEMEDIR">Template file for admin settings</require-file>
 		<code type="inline"><![CDATA[<?php
-			global $boarddir;
-			require_once($boarddir . '/SSI.php');
-			add_integration_function('integrate_pre_include', '$sourcedir/WordpressBridge.php');
+			require_once(BOARDDIR . '/SSI.php');
+			add_integration_function('integrate_pre_include', 'SOURCEDIR/WordpressBridge.php');
 		]]></code>
 		<redirect type="inline" url="?action=admin;area=wordpress;sa=bridge" timeout="5000">Thank you for installing BlogBridger, you will now be redirected to the settings page.</redirect>
 	</install>
 
-	<uninstall for="2.0 RC5">
+	<uninstall for="1.0-1.0.99">
 		<code type="inline"><![CDATA[<?php
-			global $boarddir;
-			require_once($boarddir . '/SSI.php');
-			remove_integration_function('integrate_pre_include', '$sourcedir/WordpressBridge.php');
+			require_once(BOARDDIR . '/SSI.php');
+			remove_integration_function('integrate_pre_include', 'SOURCEDIR/WordpressBridge.php');
 		]]></code>
-		<remove-file name="$languagedir/WordpressBridge.english.php" />
-		<remove-file name="$themedir/WordpressBridge.template.php" />
-		<remove-file name="$sourcedir/WordpressBridge.php" />
-		<remove-file name="$sourcedir/WordpressUser.php" />
-		<remove-file name="$sourcedir/WordpressPassword.php" />
+		<remove-file name="LANGUAGEDIR/english/WordpressBridge.english.php" />
+		<remove-file name="THEMEDIR/WordpressBridge.template.php" />
+		<remove-file name="SOURCEDIR/WordpressBridge.php" />
+		<remove-file name="SOURCEDIR/WordpressUser.php" />
+		<remove-file name="SOURCEDIR/WordpressPassword.php" />
 	</uninstall>
-
-	<upgrade>
-		<readme parsebbc="true">README</readme>
-		<require-file name="WordpressBridge.php" destination="$sourcedir">Install the core BlogBridger class</require-file>
-		<require-file name="WordpressUser.php" destination="$sourcedir">Install the BlogBridger User class</require-file>
-		<require-file name="WordpressPassword.php" destination="$sourcedir">Install the BlogBridger Password class</require-file>
-		<require-file name="WordpressBridge.english.php" destination="$languagedir">Language file with all language strings</require-file>
-		<require-file name="WordpressBridge.template.php" destination="$themedir">Template file for admin settings</require-file>
-		<redirect type="inline" url="?action=admin;area=wordpress;sa=bridge" timeout="5000">Thank you for installing BlogBridger, you will now be redirected to the settings page.</redirect>
-	</upgrade>
 </package-info>
