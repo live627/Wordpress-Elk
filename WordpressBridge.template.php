@@ -37,17 +37,17 @@ function template_callback_wordpress_edit_roles() {
     global $context, $txt;
 
     echo '
-			<dt><strong>', $txt['wordpress smf groups'], '</strong></dt>
+			<dt><strong>', $txt['wordpress elk groups'], '</strong></dt>
 			<dd><strong>', $txt['wordpress wp groups'], '</strong></dd>';
-    foreach ($context['smfGroups'] as $group) {
+    foreach ($context['elkGroups'] as $group) {
         echo '
 			<dt>', $group['group_name'], '</dt>
 			<dd>
-				<select name="smfroles[', $group['id_group'], ']">
+				<select name="elkroles[', $group['id_group'], ']">
 					<option value="">', $txt['wordpress select one'], '</option>';
         foreach ($context['wpRoles'] as $id => $info) {
             echo '
-					<option value="', $id, '"', (!empty($context['wpMapping']['smf'][$group['id_group']]) && $context['wpMapping']['smf'][$group['id_group']] === $id ? ' selected="selected"' : ''), '>', $info['name'], '</option>';
+					<option value="', $id, '"', (!empty($context['wpMapping']['elk'][$group['id_group']]) && $context['wpMapping']['elk'][$group['id_group']] === $id ? ' selected="selected"' : ''), '>', $info['name'], '</option>';
         }
         echo '
 				</select>
@@ -60,14 +60,14 @@ function template_callback_wordpress_edit_membergroups() {
 
     echo '
 			<dt><strong>', $txt['wordpress wp groups'], '</strong></dt>
-			<dd><strong>', $txt['wordpress smf groups'], '</strong></dd>';
+			<dd><strong>', $txt['wordpress elk groups'], '</strong></dd>';
     foreach ($context['wpRoles'] as $id => $info) {
         echo '
 			<dt>', $info['name'], '</dt>
 			<dd>
 				<select name="wproles[', $id, ']">
 					<option value="">', $txt['wordpress select one'], '</option>';
-        foreach ($context['smfGroups'] as $group) {
+        foreach ($context['elkGroups'] as $group) {
             echo '
 					<option value="', $group['id_group'], '"', (!empty($context['wpMapping']['wp'][$id]) && $context['wpMapping']['wp'][$id] === $group['id_group'] ? ' selected="selected"' : ''), '>', $group['group_name'], '</option>';
         }

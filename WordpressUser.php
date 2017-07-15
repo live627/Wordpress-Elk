@@ -272,18 +272,18 @@ class WordpressUser {
     }
 
     /**
-     * Given a SMF group, sets the role of the user according to mapped role
+     * Given a Elk group, sets the role of the user according to mapped role
      * or the default role if a mapping is not found.
      *
-     * @param int $id SMF group number
+     * @param int $id Elk group number
      */
     private function set_role($id) {
         global $modSettings, $smcFunc;
 
-        $roleMaps = !empty($modSettings['wordpress_role_maps']) ? unserialize($modSettings['wordpress_role_maps']) : array('smf' => array(), 'wp' => array());
+        $roleMaps = !empty($modSettings['wordpress_role_maps']) ? unserialize($modSettings['wordpress_role_maps']) : array('elk' => array(), 'wp' => array());
 
-        if (isset($roleMaps['smf'][$id]))
-            $role = $roleMaps['smf'][$id];
+        if (isset($roleMaps['elk'][$id]))
+            $role = $roleMaps['elk'][$id];
         else {
             // Query wordpress to find the default
             $request = $smcFunc['db_query']('', '

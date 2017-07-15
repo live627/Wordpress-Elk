@@ -63,7 +63,7 @@ class WordpressBridge {
      * Setup the object, gather all of the relevant settings
      */
     protected function __construct() {
-        global $sourcedir, $modSettings;
+        global $modSettings;
 
         $this->hooks = array(
             'integrate_pre_load',
@@ -81,7 +81,7 @@ class WordpressBridge {
         if (!$this->persistHooks)
             $this->installHooks();
 
-        require_once($sourcedir . '/WordpressUser.php');
+        require_once(SOURCEDIR . '/WordpressUser.php');
 
         $this->enabled = !empty($modSettings['wordpress_enabled']);
     }
@@ -108,7 +108,7 @@ class WordpressBridge {
     }
 
     /**
-     * Takes all call_integration_hook calls from SMF and figures out what
+     * Takes all call_integration_hook calls from Elk and figures out what
      * method to call within the class
      */
     public static function handleHook() {
@@ -153,7 +153,6 @@ class WordpressBridge {
                 return;
         }
 
-        define('WIRELESS', FALSE);
         $_SERVER['REQUEST_URL'] = !empty($_SERVER['REQUEST_URL']) ? $_SERVER['REQUEST_URL'] : '';
 
         $orgin = parse_url($_GET['url']);
@@ -197,9 +196,9 @@ class WordpressBridge {
     }
 
     /**
-     * Adds the Wordpress menu options to SMF's admin panel
+     * Adds the Wordpress menu options to Elk's admin panel
      *
-     * @param array &$admin_areas Admin areas from SMF
+     * @param array &$admin_areas Admin areas from Elk
      */
     public function integrate_admin_areas(&$admin_areas) {
         global $txt, $modSettings;
@@ -227,12 +226,12 @@ class WordpressBridge {
 
     /**
      * This checks to see if the user exists in WP or not.  If they do but don't
-     * exist in SMF, the SMF user is created.  If they are in SMF but not WP,
+     * exist in Elk, the Elk user is created.  If they are in Elk but not WP,
      * they are created in WP.  If they exist in both or don't exist in either,
-     * we fall through and let SMF handle it.
+     * we fall through and let Elk handle it.
      *
      * @param string $user Username
-     * @param string $hashPasswd Hashed password from SMF
+     * @param string $hashPasswd Hashed password from Elk
      * @return string 'retry' if we need a non-hashed password or '' if we are okay 
      */
     public function integrate_validate_login($user, $hashPasswd) {
@@ -246,7 +245,7 @@ class WordpressBridge {
         // Check if they exist in Wordpress
         $this->wpUser = new WordpressUser($this->db_prefix, $this->db_connection, $user);
 
-        // We need to know if they exist in SMF too
+        // We need to know if they exist in Elk too
         $request = $smcFunc['db_query']('', '
 			SELECT *
 			FROM {db_prefix}members
@@ -255,20 +254,20 @@ class WordpressBridge {
                 array(
                     'user' => $user,
             ));
-        $smfUser = $smcFunc['db_num_rows']($request) > 0 ? $smcFunc['db_fetch_assoc']($request) : FALSE;
+        $elkUser = $smcFunc['db_num_rows']($request) > 0 ? $smcFunc['db_fetch_assoc']($request) : FALSE;
         $smcFunc['db_free_result']($request);
 
         // Not in either table, or in both, fall through
-        if ((!isset($this->wpUser->ID) && !$smfUser) || (isset($this->wpUser->ID) && $smfUser))
+        if ((!isset($this->wpUser->ID) && !$elkUser) || (isset($this->wpUser->ID) && $elkUser))
             return '';
 
         // A hashed password but missing user requires a retry to populate the user
         if ($hashPasswd !== NULL)
             return 'retry';
 
-        $roleMaps = !empty($modSettings['wordpress_role_maps']) ? unserialize($modSettings['wordpress_role_maps']) : array('smf' => array(), 'wp' => array());
+        $roleMaps = !empty($modSettings['wordpress_role_maps']) ? unserialize($modSettings['wordpress_role_maps']) : array('elk' => array(), 'wp' => array());
 
-        // Create a SMF user
+        // Create a Elk user
         if (isset($this->wpUser->ID)) {
             // First make sure they used the right password
             if (!$this->wpUser->isLegit($_POST['passwrd']))
@@ -307,15 +306,15 @@ class WordpressBridge {
 
         // Create a WP user
         else {
-            $this->wpUser->user_login = $smfUser['member_name'];
-            $this->wpUser->user_nicename = $smfUser['member_name'];
-            $this->wpUser->user_email = $smfUser['email_address'];
+            $this->wpUser->user_login = $elkUser['member_name'];
+            $this->wpUser->user_nicename = $elkUser['member_name'];
+            $this->wpUser->user_email = $elkUser['email_address'];
             $this->wpUser->user_pass = $_POST['passwrd'];
-            $this->wpUser->user_url = $smfUser['website_url'];
-            $this->wpUser->user_registered = gmdate("Y-m-d H:i:s", $smfUser['date_registered']);
+            $this->wpUser->user_url = $elkUser['website_url'];
+            $this->wpUser->user_registered = gmdate("Y-m-d H:i:s", $elkUser['date_registered']);
             $this->wpUser->user_status = 0;
-            $this->wpUser->display_name = $smfUser['real_name'];
-            $this->wpUser->role = $smfUser['id_group'];
+            $this->wpUser->display_name = $elkUser['real_name'];
+            $this->wpUser->role = $elkUser['id_group'];
 
             $this->wpUser->save();
             return '';
@@ -326,7 +325,7 @@ class WordpressBridge {
      * Logs a user into Wordpress by setting cookies
      *
      * @param string $user Username
-     * @param string $hashPasswd SMF's version of the hashed password (unused)
+     * @param string $hashPasswd Elk's version of the hashed password (unused)
      * @param int $cookieTime Time cookie should be live for
      * @return void
      */
@@ -381,7 +380,7 @@ class WordpressBridge {
     }
 
     /**
-     * Takes the registration data from SMF, creates a new user in WordPress
+     * Takes the registration data from Elk, creates a new user in WordPress
      * and populates it's data and saves.
      *
      * @param array &$regOptions Array of Registration data
@@ -409,7 +408,7 @@ class WordpressBridge {
     }
 
     /**
-     * Called when a user resets their password in SMF.  It will properly hash
+     * Called when a user resets their password in Elk.  It will properly hash
      * it into a WordPress compatible version and modify the user in WordPress.
      *
      * @param string $user Username to change
@@ -438,18 +437,18 @@ class WordpressBridge {
     }
 
     /**
-     * Updates a users' WordPress information when they change in SMF
+     * Updates a users' WordPress information when they change in Elk
      *
      * @param array $member_names All of the members to change
-     * @param string $var Variable that is being updated in SMF
-     * @param mixed $data Data being updated in SMF
+     * @param string $var Variable that is being updated in Elk
+     * @param mixed $data Data being updated in Elk
      * @return void 
      */
     public function integrate_change_member_data($member_names, $var, $data) {
         if (!$this->enabled)
             return;
 
-        // SMF var => Wordpress user var
+        // Elk var => Wordpress user var
         $integrateVars = array(
             'member_name' => 'user_login',
             'real_name' => 'display_name',
@@ -525,7 +524,7 @@ class WordpressBridge {
     /*     * ***  Private functions beyond this point **** */
 
     /**
-     * General Settings page for bridge in SMF
+     * General Settings page for bridge in Elk
      */
     private function ModifyBridgeSettings() {
         global $scripturl, $txt, $context, $boarddir, $modSettings;
@@ -579,7 +578,7 @@ class WordpressBridge {
     }
 
     /**
-     * Called in SMF admin panel for managing roles
+     * Called in Elk admin panel for managing roles
      */
     private function ManageRoles() {
         global $txt, $scripturl, $context, $settings, $smcFunc, $modSettings;
@@ -592,14 +591,14 @@ class WordpressBridge {
 			ORDER BY CASE WHEN id_group < 4 THEN id_group ELSE 4 END, group_name',
                 array()
         );
-        $context['smfGroups'] = array(
+        $context['elkGroups'] = array(
             '0' => array(
                 'id_group' => 0,
                 'group_name' => $txt['membergroups_members'],
             ),
         );
         while ($row = $smcFunc['db_fetch_assoc']($request))
-            $context['smfGroups'][$row['id_group']] = array(
+            $context['elkGroups'][$row['id_group']] = array(
                 'id_group' => $row['id_group'],
                 'group_name' => $row['group_name'],
             );
@@ -622,14 +621,14 @@ class WordpressBridge {
         $context['wpRoles'] = unserialize($wp_roles);
 
         // Lastly, our mapping
-        $context['wpMapping'] = !empty($modSettings['wordpress_role_maps']) ? unserialize($modSettings['wordpress_role_maps']) : array('smf' => array(), 'wp' => array());
+        $context['wpMapping'] = !empty($modSettings['wordpress_role_maps']) ? unserialize($modSettings['wordpress_role_maps']) : array('elk' => array(), 'wp' => array());
 
         $config_vars = array(
-            array('title', 'wordpress wp to smf mapping'),
-            array('desc', 'wordpress wp to smf mapping desc'),
+            array('title', 'wordpress wp to elk mapping'),
+            array('desc', 'wordpress wp to elk mapping desc'),
             array('callback', 'wordpress_edit_roles'),
-            array('title', 'wordpress smf to wp mapping'),
-            array('desc', 'wordpress smf to wp mapping desc'),
+            array('title', 'wordpress elk to wp mapping'),
+            array('desc', 'wordpress elk to wp mapping desc'),
             array('callback', 'wordpress_edit_membergroups'),
         );
 
@@ -638,15 +637,15 @@ class WordpressBridge {
         if (isset($_GET['save'])) {
             checkSession();
 
-            foreach ($_POST['smfroles'] as $id_group => $role)
-                if (empty($context['smfGroups'][$id_group]) || empty($context['wpRoles'][$role]))
-                    unset($_POST['smfroles'][$id_group]);
+            foreach ($_POST['elkroles'] as $id_group => $role)
+                if (empty($context['elkGroups'][$id_group]) || empty($context['wpRoles'][$role]))
+                    unset($_POST['elkroles'][$id_group]);
 
             foreach ($_POST['wproles'] as $role => $id_group)
-                if (empty($context['smfGroups'][$id_group]) || empty($context['wpRoles'][$role]))
+                if (empty($context['elkGroups'][$id_group]) || empty($context['wpRoles'][$role]))
                     unset($_POST['wproles'][$role]);
 
-            $_POST['wordpress_role_maps'] = serialize(array('smf' => $_POST['smfroles'], 'wp' => $_POST['wproles']));
+            $_POST['wordpress_role_maps'] = serialize(array('elk' => $_POST['elkroles'], 'wp' => $_POST['wproles']));
 
             $save_vars = array(
                 array('text', 'wordpress_role_maps'),
@@ -1052,5 +1051,5 @@ class WordpressBridge {
 
 }
 
-if (defined('SMF'))
+if (defined('ELK'))
     WordpressBridge::getInstance();
