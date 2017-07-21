@@ -33,8 +33,6 @@
 	<install for="1.0-1.0.99">
 		<readme parsebbc="true">README</readme>
 		<require-file name="WordpressBridge.php" destination="SOURCEDIR">Install the core BlogBridger class</require-file>
-		<require-file name="WordpressUser.php" destination="SOURCEDIR">Install the BlogBridger User class</require-file>
-		<require-file name="WordpressPassword.php" destination="SOURCEDIR">Install the BlogBridger Password class</require-file>
 		<require-file name="WordpressBridge.english.php" destination="LANGUAGEDIR/english">Language file with all language strings</require-file>
 		<require-file name="WordpressBridge.template.php" destination="THEMEDIR">Template file for admin settings</require-file>
 		<code type="inline"><![CDATA[<?php
@@ -52,7 +50,5 @@
 		<remove-file name="LANGUAGEDIR/english/WordpressBridge.english.php" />
 		<remove-file name="THEMEDIR/WordpressBridge.template.php" />
 		<remove-file name="SOURCEDIR/WordpressBridge.php" />
-		<remove-file name="SOURCEDIR/WordpressUser.php" />
-		<remove-file name="SOURCEDIR/WordpressPassword.php" />
 	</uninstall>
 </package-info>
