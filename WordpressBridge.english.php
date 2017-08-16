@@ -43,10 +43,7 @@ $txt['wordpress_path'] = 'Wordpress Path';
 $txt['wordpress path desc'] = 'This should be the full file path to your wp-config.php file.';
 $txt['wordpress path desc extra'] = 'This path is a guess and has NOT been saved yet.  Please click the "Save" button to save this path permamently.';
 $txt['wordpress path desc extra2'] = 'Empty this field and hit save to attempt to find this automatically.';
-$txt['wordpress fix'] = 'Fix File';
-$txt['wordpress unfix'] = 'Revert File';
-$txt['wordpress edit login file'] = 'Adjust WordPress wp-login.php file';
-$txt['wordpress edit login file desc'] = 'This will <strong>try</strong> to alter your wp-login.php file by redirecting all requests to it to ElkArte\'s login page instead.';
+$txt['wordpress_version'] = 'Wordpress Version';
 
 // Role settings
 $txt['wordpress roles'] = 'Role Settings';
@@ -62,9 +59,12 @@ $txt['wordpress wp to elk mapping desc'] = 'As users are created in Wordpress, t
 // Error strings
 $txt['wordpress no config'] = 'No Wordpress configuration file was found';
 $txt['wordpress cannot connect'] = 'Could not connect to the Wordpress database';
-$txt['wordpress invalid keys'] = 'You do not have the required keys or salts in your Wordpress installation.  Please visit <a href="https://api.wordpress.org/secret-key/1.1/salt/">https://api.wordpress.org/secret-key/1.1/salt/</a> and copy the output to your wp-config.php file.';
 $txt['wordpress cannot sync'] = 'There was a problem logging %s into ElkArte using the Wordpress account.  Please ask the administrator to check the error log for more information.';
 $txt['wordpress cannot read'] = 'Could not read the Wordpress file.  Please ask your host to allow one of the following functions: %s';
 $txt['wordpress problems'] = 'We found the following problems:';
-$txt['wordpress edit login file failed'] = 'wp-login.php is not redirecting to ElkArte';
-$txt['wordpress path not writable'] = 'Wordpress path is not writable by the webserver.  We will not be able to make backups of modified Wordpress files';
+
+// plugin strings
+$txt['wordpress inactive'] = 'The Wordpress redirection plugin is inactive.<br><br><a class="new_win" href="%s/wp-admin/plugins.php" target="_blank">Activate it in your Wordpress admin panel</a>';
+$txt['wordpress active'] = 'The Wordpress redirection plugin is active.';
+$txt['wordpress activated'] = 'The Wordpress redirection plugin is now activated.';
+$txt['wordpress activate_plugin'] = 'Activate the Wordpress redirection plugin';

@@ -37,21 +37,21 @@ function template_callback_wordpress_edit_roles() {
     global $context, $txt;
 
     echo '
-			<dt><strong>', $txt['wordpress elk groups'], '</strong></dt>
-			<dd><strong>', $txt['wordpress wp groups'], '</strong></dd>';
+            <dt><strong>', $txt['wordpress elk groups'], '</strong></dt>
+            <dd><strong>', $txt['wordpress wp groups'], '</strong></dd>';
     foreach ($context['elkGroups'] as $group) {
         echo '
-			<dt>', $group['group_name'], '</dt>
-			<dd>
-				<select name="elkroles[', $group['id_group'], ']">
-					<option value="">', $txt['wordpress select one'], '</option>';
-        foreach ($context['wpRoles'] as $id => $info) {
+            <dt>', $group['group_name'], '</dt>
+            <dd>
+                <select name="elkroles[', $group['id_group'], ']">
+                    <option value="">', $txt['wordpress select one'], '</option>';
+        foreach ($context['wpRoles'] as $id => $name) {
             echo '
-					<option value="', $id, '"', (!empty($context['wpMapping']['elk'][$group['id_group']]) && $context['wpMapping']['elk'][$group['id_group']] === $id ? ' selected="selected"' : ''), '>', $info['name'], '</option>';
+                    <option value="', $id, '"', (!empty($context['wpMapping']['elk'][$group['id_group']]) && $context['wpMapping']['elk'][$group['id_group']] === $id ? ' selected="selected"' : ''), '>', $name, '</option>';
         }
         echo '
-				</select>
-			</dd>';
+                </select>
+            </dd>';
     }
 }
 
@@ -59,34 +59,20 @@ function template_callback_wordpress_edit_membergroups() {
     global $context, $txt;
 
     echo '
-			<dt><strong>', $txt['wordpress wp groups'], '</strong></dt>
-			<dd><strong>', $txt['wordpress elk groups'], '</strong></dd>';
-    foreach ($context['wpRoles'] as $id => $info) {
+            <dt><strong>', $txt['wordpress wp groups'], '</strong></dt>
+            <dd><strong>', $txt['wordpress elk groups'], '</strong></dd>';
+    foreach ($context['wpRoles'] as $id => $name) {
         echo '
-			<dt>', $info['name'], '</dt>
-			<dd>
-				<select name="wproles[', $id, ']">
-					<option value="">', $txt['wordpress select one'], '</option>';
+            <dt>', $name, '</dt>
+            <dd>
+                <select name="wproles[', $id, ']">
+                    <option value="">', $txt['wordpress select one'], '</option>';
         foreach ($context['elkGroups'] as $group) {
             echo '
-					<option value="', $group['id_group'], '"', (!empty($context['wpMapping']['wp'][$id]) && $context['wpMapping']['wp'][$id] === $group['id_group'] ? ' selected="selected"' : ''), '>', $group['group_name'], '</option>';
+                    <option value="', $group['id_group'], '"', (isset($context['wpMapping']['wp'][$id]) && $context['wpMapping']['wp'][$id] === $group['id_group'] ? ' selected="selected"' : ''), '>', $group['group_name'], '</option>';
         }
         echo '
-				</select>
-			</dd>';
-    }
-}
-
-function template_callback_wordpress_edit_files() {
-    global $txt, $context;
-
-    foreach ($context['wp-files'] as $file)
-        echo '
-            <dt>
-                ', $txt[$file['title']], '<br />
-                <span class="smalltext">', $txt[$file['title'] . ' desc'], '</span>
-            </dt>
-            <dd>
-                <input class="button_submit" type="submit" name="fix-file[', $file['fix'] ? 'fix-' : 'revert-', $file['name'], ']" value="', $txt['wordpress ' . ($file['fix'] ? 'fix' : 'unfix')], '" />&nbsp;
+                </select>
             </dd>';
+    }
 }
