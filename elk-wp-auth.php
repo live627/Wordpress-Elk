@@ -1,4 +1,14 @@
 <?php
+
+/**
+ * @package   Wordpress Bridge
+ * @version   1.0
+ * @author    Matt Zuba <matt@mattzuba.com>
+ * @author    John Rayes <live627@gmail.com>
+ * @copyright Copyright (c) 2017, John Rayes
+ * @license   http://opensource.org/licenses/MIT MIT
+ */
+
 /*
 Plugin Name: elk-wp-auth
 Description: Login redirect to elk
