@@ -40,7 +40,7 @@ $txt['wordpress cannot read'] = 'Could not read the Wordpress file.  Please ask 
 $txt['wordpress problems'] = 'We found the following problems:';
 
 // plugin strings
-$txt['wordpress inactive'] = 'The Wordpress redirection plugin is inactive.<br><br><a class="new_win" href="%s/wp-admin/plugins.php" target="_blank">Activate it in your Wordpress admin panel</a>';
+$txt['wordpress inactive'] = 'The Wordpress redirection plugin is inactive.';
 $txt['wordpress active'] = 'The Wordpress redirection plugin is active.';
 $txt['wordpress activated'] = 'The Wordpress redirection plugin is now activated.';
 $txt['wordpress activate_plugin'] = 'Activate the Wordpress redirection plugin';

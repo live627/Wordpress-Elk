@@ -520,7 +520,7 @@ class WordpressBridge
             include_once(ABSPATH.'wp-admin/includes/plugin.php');
             $config_vars[3]['var_message'] = $wp_version;
             if (is_plugin_inactive($this->plugin_path)) {
-                $context['settings_insert_above'] = '<div class="errorbox">'.sprintf($txt['wordpress inactive'],get_option( 'siteurl' )).'</div>';
+                $context['settings_insert_above'] = '<div class="errorbox">'.$txt['wordpress inactive'].'</div>';
             $config_vars[1]['postinput'] = sprintf('<br><input name="activate" value="%s" type="submit">',$txt['wordpress activate_plugin']);
             } elseif (!get_option('elk_path')) {
                 update_option('elk_path', BOARDDIR);
