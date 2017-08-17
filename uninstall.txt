@@ -1,0 +1,5 @@
+[center][size=4][color=red]ATTENTION[/color][/size][/center]
+[hr]
+This action will deactivate all features of Wordpress Bridge. Logins will no longer be bridged between WordPress and ElkArte.
+
+Thank You for trying this modification :)

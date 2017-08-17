@@ -1,30 +1,27 @@
 <?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.elkarte.net/site/package-info">
+<package-info xmlns="http://www.elkarte.net/site/package-info">
+    <id>live627:WordpressBridge</id>
+    <name>Wordpress Bridge</name>
+    <version>1.0</version>
+    <type>modification</type>
 
-<package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
-	<id>slammeddime:blogbridger</id>
-	<name>BlogBridger</name>
-	<version>1.1.5</version>
-	<type>modification</type>
+    <install for="1.0 - 1.0.99">
+        <readme parsebbc="true">install.txt</readme>
+        <hook hook="integrate_pre_load" file="SOURCEDIR/WordpressBridge.php" function="WordpressBridge::getInstance"/>
+        <require-file name="WordpressBridge.php" destination="SOURCEDIR">Install the core BlogBridger class</require-file>
+        <require-file name="WordpressBridge.english.php" destination="LANGUAGEDIR/english">Language file with all language strings</require-file>
+        <require-file name="WordpressBridge.template.php" destination="THEMEDIR">Template file for admin settings</require-file>
+        <redirect url="?action=admin;area=wordpress;sa=bridge"/>
+    </install>
 
-	<install for="1.0-1.0.99">
-		<readme parsebbc="true">README</readme>
-		<require-file name="WordpressBridge.php" destination="SOURCEDIR">Install the core BlogBridger class</require-file>
-		<require-file name="WordpressBridge.english.php" destination="LANGUAGEDIR/english">Language file with all language strings</require-file>
-		<require-file name="WordpressBridge.template.php" destination="THEMEDIR">Template file for admin settings</require-file>
-		<code type="inline"><![CDATA[<?php
-			require_once(BOARDDIR . '/SSI.php');
-			add_integration_function('integrate_pre_include', 'SOURCEDIR/WordpressBridge.php');
-		]]></code>
-		<redirect type="inline" url="?action=admin;area=wordpress;sa=bridge" timeout="5000">Thank you for installing BlogBridger, you will now be redirected to the settings page.</redirect>
-	</install>
+    <uninstall for="1.0 - 1.0.99">
+        <readme parsebbc="true">uninstall.txt</readme>
+        <database>uninstall-optional.php</database>
+        <hook reverse="true" hook="integrate_pre_load" file="SOURCEDIR/WordpressBridge.php" function="WordpressBridge::getInstance"/>
+        <remove-file name="LANGUAGEDIR/english/WordpressBridge.english.php" />
+        <remove-file name="THEMEDIR/WordpressBridge.template.php" />
+        <remove-file name="SOURCEDIR/WordpressBridge.php" />
+    </uninstall>
 
-	<uninstall for="1.0-1.0.99">
-		<code type="inline"><![CDATA[<?php
-			require_once(BOARDDIR . '/SSI.php');
-			remove_integration_function('integrate_pre_include', 'SOURCEDIR/WordpressBridge.php');
-		]]></code>
-		<remove-file name="LANGUAGEDIR/english/WordpressBridge.english.php" />
-		<remove-file name="THEMEDIR/WordpressBridge.template.php" />
-		<remove-file name="SOURCEDIR/WordpressBridge.php" />
-	</uninstall>
 </package-info>

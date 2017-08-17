@@ -642,7 +642,3 @@ class WordpressBridge
         }
     }
 }
-
-if (defined('ELK')) {
-    WordpressBridge::getInstance();
-}
