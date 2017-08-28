@@ -264,6 +264,8 @@ class WordpressBridge
             wp_set_current_user($user->ID, $user->user_login);
             wp_set_auth_cookie($user->ID);
             do_action('wp_login', $user->user_login);
+                    // Stupid haxorz to make ElkArte behave
+                        $_SESSION['login_url'] = home_url();
         }
     }
 
